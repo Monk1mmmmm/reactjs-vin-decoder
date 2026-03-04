@@ -44,7 +44,7 @@ function Variables() {
             <>
                 <h1>Variable list:</h1>
 
-                {response.map((item, index) => (
+                {response.map((item) => (
                     <div key={item.ID} className="variable">
                         <h2><a href={"/variables/" + item.ID}>{item.Name}</a></h2>
                         <span className="groupname">{"(" + item.GroupName + ")"}</span>

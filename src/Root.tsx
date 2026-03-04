@@ -116,7 +116,7 @@ function Root() {
         {response && (
             <div>
                 <strong>{response.Message}</strong>
-                {response.Results.map((item, index) => {
+                {response.Results.map((item) => {
                     if (item.Value) return (
                         <p key={item.VariableId}>
                             <a href={"/variables/" + item.VariableId}>{item.Variable}:</a> {item.Value}
