@@ -1,0 +1,79 @@
+import { useEffect, useState } from 'react'
+import DOMPurify from "dompurify";
+import { useParams } from 'react-router-dom';
+
+const apiUrl = "https://vpic.nhtsa.dot.gov/api";
+
+type vehicleVariable = {
+    DataType: string;
+    Description: string;
+    GroupName: string;
+    ID: number;
+    Name: string;
+}
+
+function Variables() {
+    const { variableId } = useParams();
+
+    const [response, setResponse] = useState<vehicleVariable[]>([]);
+    const [error, setError] = useState<string>("");
+
+    useEffect(() => {
+            fetch(apiUrl +
+                "/vehicles/getvehiclevariablelist" +
+                "?format=json")
+                .then(res => res.json())
+                .then(res => res.Results)
+                .then((res: vehicleVariable[]) => {
+                    setResponse(res);
+                }).catch ((err: unknown) => {
+                    if (err instanceof Error) {
+                        setError(err.message);
+                    } else {
+                        setError(String(err));
+                    }
+                })
+    }, [])
+
+    if (error) return <p className="error">Error: {error}</p>
+
+    if (!variableId) {
+        return (
+            <>
+                <h1>Variable list:</h1>
+
+                {response.map((item, index) => (
+                    <div key={item.ID} className="variable">
+                        <h2><a href={"/variables/" + item.ID}>{item.Name}</a></h2>
+                        <span className="groupname">{"(" + item.GroupName + ")"}</span>
+                        <span className="description"
+                            dangerouslySetInnerHTML={{
+                                __html: DOMPurify.sanitize(item.Description)
+                            }}>
+                        </span>
+                    </div>
+                ))}
+            </>
+        )
+    }
+
+    const idNumber = Number(variableId);
+    const variable = response.find(v => v.ID === idNumber);
+
+    if (!variable && response.length > 0) {
+        return <h1>Variable not found</h1>;
+    }
+
+    if (!variable) {
+        return <p>Loading...</p>;
+    }
+
+    return (
+    <>
+        <h1>{variable.Name}</h1>
+        <div dangerouslySetInnerHTML={{ __html: variable.Description }} />
+    </>
+    );
+}
+
+export default Variables

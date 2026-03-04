@@ -1,0 +1,30 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+h1 {
+  color: darkslategray;
+}
+
+.card {
+  padding: 2em;
+  border: 5px solid darkslategray;
+  border-radius: 10px;
+}
+
+.groupname {
+  color: slategray;
+}
+
+.textinput {
+  width: 95%;
+  height: 25px;
+  margin: 6px auto;
+}
+.submit {
+  padding: 4px 10px;
+  margin-top: 10px;
+}
