@@ -19,10 +19,11 @@ function Root() {
     // Form elements
     const [vin, setVin] = useState("");
     const [modelYear, setModelYear] = useState("");
+    const [history, setHistory] = useState<string[]>([]); // Previously used VINs
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-    
+
     const [response, setResponse] = useState<vinResponse | null>(null);
 
     const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -36,6 +37,15 @@ function Root() {
             setError("Invalid VIN. A VIN must be 17 characters long and cannot contain I, O, or Q.");
             return;
         }
+        
+        // Years 1900-current year
+        const year = parseInt(modelYear, 10);
+        const currentYear = new Date().getFullYear();
+
+        if (!/^[12]\d{3}$/.test(modelYear) || year < 1900 || year > currentYear) {
+            setError(`Invalid model year. Must be between 1900 and ${currentYear}.`);
+            return;
+        }
 
         setLoading(true);
 
@@ -45,7 +55,15 @@ function Root() {
             "?format=json&modelyear" +
             encodeURIComponent(modelYear)
         ).then(res => res.json())
-        .then(setResponse)
+        .then(data => {
+            setResponse(data);
+
+            // Update last 3 VINs, avoid duplicates
+            setHistory(prev => {
+                const newHistory = [vin, ...prev.filter(v => v !== vin)]
+                return newHistory.slice(0,3);
+            });
+        })
         .catch ((err: unknown) => {
             if (err instanceof Error) {
                 setError(err.message);
@@ -69,7 +87,16 @@ function Root() {
             onChange={(e) => setVin(e.target.value)}
             placeholder="VIN"
             maxLength={17}
+            list="vin-suggestions"
             />
+
+            <datalist id="vin-suggestions">
+                {history.map((item, index) => (
+                    <option key={index} value={item} />
+                    // Appears as a list of suggestions when inputting a VIN
+                ))}
+            </datalist>
+
             <input type="text" className="textinput"
             id="modelYear"
             name="modelYear"
@@ -82,6 +109,7 @@ function Root() {
                 {loading ? "Decoding..." : "Decode"}
             </button>
         </form>
+        <p><a href='/variables/'>Complete variable list</a></p>
 
         {error && <p style={{ color: "red" }}>{error}</p>}
 
