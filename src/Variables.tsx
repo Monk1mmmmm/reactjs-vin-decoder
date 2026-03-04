@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import DOMPurify from "dompurify";
 import { useParams } from 'react-router-dom';
 
-const apiUrl = "https://vpic.nhtsa.dot.gov/api";
+const API_URL = "https://vpic.nhtsa.dot.gov/api";
 
 type vehicleVariable = {
     DataType: string;
@@ -19,20 +19,20 @@ function Variables() {
     const [error, setError] = useState<string>("");
 
     useEffect(() => {
-            fetch(apiUrl +
-                "/vehicles/getvehiclevariablelist" +
-                "?format=json")
-                .then(res => res.json())
-                .then(res => res.Results)
-                .then((res: vehicleVariable[]) => {
-                    setResponse(res);
-                }).catch ((err: unknown) => {
-                    if (err instanceof Error) {
-                        setError(err.message);
-                    } else {
-                        setError(String(err));
-                    }
-                })
+        fetch(API_URL +
+            "/vehicles/getvehiclevariablelist" +
+            "?format=json")
+            .then(res => res.json())
+            .then(res => res.Results)
+            .then((res: vehicleVariable[]) => {
+                setResponse(res);
+            }).catch ((err: unknown) => {
+                if (err instanceof Error) {
+                    setError(err.message);
+                } else {
+                    setError(String(err));
+                }
+            })
     }, [])
 
     if (error) return <p className="error">Error: {error}</p>

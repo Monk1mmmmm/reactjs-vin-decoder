@@ -21,10 +21,12 @@ h1 {
 
 .textinput {
   width: 95%;
-  height: 25px;
+  height: 17px;
+  padding: 8px;
   margin: 6px auto;
 }
 .submit {
   padding: 4px 10px;
-  margin-top: 10px;
+  margin: 10px 0;
+  border: 1px solid slategray;
 }

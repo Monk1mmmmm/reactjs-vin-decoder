@@ -1,16 +1,55 @@
 import { useState } from 'react'
 import './Root.css'
 
-function Root() {
-  const [vin, setVin] = useState("");
-  const [modelYear, setModelYear] = useState("");
+const API_URL = "https://vpic.nhtsa.dot.gov/api";
 
-  return (
+type vinResult = {
+    Value: string;
+    ValueId: string;
+    Variable: string;
+    VariableId: number;
+}
+
+type vinResponse = {
+    Message: string;
+    Results: vinResult[];
+}
+
+function Root() {
+    const [vin, setVin] = useState("");
+    const [modelYear, setModelYear] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+    const [response, setResponse] = useState<vinResponse | null>(null);
+
+    const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setLoading(true);
+        setError("");
+        setResponse(null);
+
+        fetch(API_URL +
+            "/vehicles/DecodeVin/" +
+            encodeURIComponent(vin) +
+            "?format=json&modelyear" +
+            encodeURIComponent(modelYear)
+        ).then(res => res.json())
+        .then(setResponse)
+        .catch ((err: unknown) => {
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError(String(err));
+            }
+        })
+        .finally(() => setLoading(false));
+    }
+
+    return (
     <>
-      <h1>VIN decoder</h1>
-      <div className="card">
-        <form>
-          <div>
+    <h1>VIN decoder</h1>
+    <div className="card">
+        <form onSubmit={handleSubmit}>
             <input type="text" className="textinput"
             id="vin"
             name="vin"
@@ -28,13 +67,28 @@ function Root() {
             placeholder="Model year (optional)"
             maxLength={4}
             />
-            <input type="submit" className="submit"
-            />
-          </div>
+            <button type="submit" className="submit" disabled={loading}>
+                {loading ? "Decoding..." : "Decode"}
+            </button>
         </form>
-      </div>
+
+        {error && <p style={{ color: "red" }}>{error}</p>}
+
+        {response && (
+            <div>
+                <strong>{response.Message}</strong>
+                {response.Results.map((item, index) => {
+                    if (item.Value) return (
+                        <p key={item.VariableId}>
+                            <a href={"/variables/" + item.VariableId}>{item.Variable}:</a> {item.Value}
+                        </p>
+                    )
+                })}
+            </div>
+        )}
+    </div>
     </>
-  )
+    )
 }
 
 export default Root
