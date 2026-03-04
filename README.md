@@ -2,6 +2,8 @@
 
 An SPA application using NHTSA Vehicle API to decode data, encoded in VIN. ([Read more](https://vpic.nhtsa.dot.gov/api/)). Built using React and Vite.
 
+Also hosted at GitHub Pages: [link](https://monk1mmmmm.github.io/reactjs-vin-decoder/) 
+
 ## Installation
 
 Clone the repo and `cd` into the cloned directory. Install dependencies using `npm i`.
