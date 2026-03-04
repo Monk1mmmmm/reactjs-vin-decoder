@@ -1,6 +1,6 @@
 # VIN decoder web app
 
-An SPA application using NHTSA Vehicle API to decode data, encoded in VIN. ([Read more](https://vpic.nhtsa.dot.gov/api/)). Built using React and Vite
+An SPA application using NHTSA Vehicle API to decode data, encoded in VIN. ([Read more](https://vpic.nhtsa.dot.gov/api/)). Built using React and Vite.
 
 ## Installation
 
