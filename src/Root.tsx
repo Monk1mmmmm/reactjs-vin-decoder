@@ -16,10 +16,13 @@ type vinResponse = {
 }
 
 function Root() {
+    // Form elements
     const [vin, setVin] = useState("");
     const [modelYear, setModelYear] = useState("");
+
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    
     const [response, setResponse] = useState<vinResponse | null>(null);
 
     const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {

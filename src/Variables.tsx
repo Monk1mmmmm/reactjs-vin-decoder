@@ -35,8 +35,10 @@ function Variables() {
             })
     }, [])
 
+    // Failed to fetch variables
     if (error) return <p className="error">Error: {error}</p>
 
+    // Fetching a list of variables (Request to "/variables/")
     if (!variableId) {
         return (
             <>
@@ -57,6 +59,7 @@ function Variables() {
         )
     }
 
+    // Fetching a specific variable (Request to "/variables/{variableId}")
     const idNumber = Number(variableId);
     const variable = response.find(v => v.ID === idNumber);
 
