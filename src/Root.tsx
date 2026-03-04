@@ -24,9 +24,17 @@ function Root() {
 
     const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setLoading(true);
         setError("");
         setResponse(null);
+        
+        // '*' is permitted by API to substitute for unavailable values.
+        const vinRegex = /^[A-HJ-NPR-Z0-9\*]{17}$/i;
+        if (!vinRegex.test(vin)) {
+            setError("Invalid VIN. A VIN must be 17 characters long and cannot contain I, O, or Q.");
+            return;
+        }
+
+        setLoading(true);
 
         fetch(API_URL +
             "/vehicles/DecodeVin/" +
