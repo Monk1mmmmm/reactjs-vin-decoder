@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from "react-router-dom";
 import './Root.css'
 
 const API_URL = "https://vpic.nhtsa.dot.gov/api";
@@ -109,7 +110,7 @@ function Root() {
                 {loading ? "Decoding..." : "Decode"}
             </button>
         </form>
-        <p><a href='/variables/'>Complete variable list</a></p>
+        <p><Link to='/variables/'>Complete variable list</Link></p>
 
         {error && <p style={{ color: "red" }}>{error}</p>}
 
@@ -119,7 +120,7 @@ function Root() {
                 {response.Results.map((item) => {
                     if (item.Value) return (
                         <p key={item.VariableId}>
-                            <a href={"/variables/" + item.VariableId}>{item.Variable}:</a> {item.Value}
+                            <Link to={"/variables/" + item.VariableId}>{item.Variable}:</Link> {item.Value}
                         </p>
                     )
                 })}

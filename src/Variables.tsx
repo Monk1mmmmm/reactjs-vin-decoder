@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import DOMPurify from "dompurify";
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 const API_URL = "https://vpic.nhtsa.dot.gov/api";
 
@@ -46,7 +46,7 @@ function Variables() {
 
                 {response.map((item) => (
                     <div key={item.ID} className="variable">
-                        <h2><a href={"/variables/" + item.ID}>{item.Name}</a></h2>
+                        <h2><Link to={"/variables/" + item.ID}>{item.Name}</Link></h2>
                         <span className="groupname">{"(" + item.GroupName + ")"}</span>
                         <span className="description"
                             dangerouslySetInnerHTML={{
